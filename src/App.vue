@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import RankingTable from './components/RankingTable.vue'
+import MatchdayView from './components/MatchdayView.vue'
 
 const loading = ref(false)
 const error = ref(null)
@@ -171,6 +172,12 @@ onMounted(fetchRankings)
             <h2>Poule {{ activePool.poolName }} ({{ activePool.teams.length }} équipes)</h2>
           </div>
           <RankingTable :teams="activePool.teams" :show-pool="false" highlight-team="AS SAINT ROGATIEN NANTES" />
+
+          <MatchdayView
+            :journees="activePool.journees || []"
+            highlight-team="AS SAINT ROGATIEN NANTES"
+            class="pool-matches"
+          />
         </template>
       </div>
 
@@ -390,5 +397,10 @@ footer {
     flex-direction: column;
     gap: 4px;
   }
+
+}
+
+.pool-matches {
+  margin-top: 20px;
 }
 </style>
