@@ -48,8 +48,8 @@ function sortFn(a, b) {
 
 // Classement général groupé par zone selon les règles de montée/descente :
 //   Maintien  : 1ers (8) + 2èmes (8) + 2 meilleurs 3èmes = 18
-//   DM4       : 6 autres 3èmes + 4èmes (8) + 2 meilleurs 5èmes = 16
-//   DM5       : 6 autres 5èmes + 6èmes (8) = 14
+//   DM4       : 6 autres 3èmes + 4èmes (8) + 6 meilleurs 5èmes = 22
+//   DM5       : 2 autres 5èmes + 6èmes (8) = 10
 const generalRanking = computed(() => {
   const all = pools.value.flatMap(pool =>
     pool.teams.map(t => ({ ...t, poolName: pool.poolName }))
@@ -72,10 +72,10 @@ const generalRanking = computed(() => {
   const dm4 = [
     ...thirds.slice(2),
     ...(byPos[4] ?? []).sort(sortFn),
-    ...fifths.slice(0, 2).map(t => ({ ...t, tag: 'top5' })),
+    ...fifths.slice(0, 6).map(t => ({ ...t, tag: 'top5' })),
   ]
   const dm5 = [
-    ...fifths.slice(2),                 // 6 autres 5èmes
+    ...fifths.slice(6),                 // 2 autres 5èmes
     ...(byPos[6] ?? []).sort(sortFn),   // tous les 6èmes
   ]
 
@@ -93,7 +93,7 @@ const generalZones = computed(() => {
     + Math.min(byPos[3]?.length ?? 0, 2)
   const dm4Count = Math.max(0, (byPos[3]?.length ?? 0) - 2)
     + (byPos[4]?.length ?? 0)
-    + Math.min(byPos[5]?.length ?? 0, 2)
+    + Math.min(byPos[5]?.length ?? 0, 6)
 
   return [
     { count: safeCount, label: 'Descente en DM4' },
@@ -161,7 +161,7 @@ onMounted(fetchRankings)
           </div>
           <div class="legend">
             <span class="legend-item legend-safe">Maintien — 1ers, 2èmes, 2 meilleurs 3èmes</span>
-            <span class="legend-item legend-relegate-1">Descente DM4 — autres 3èmes, 4èmes, 2 meilleurs 5èmes</span>
+            <span class="legend-item legend-relegate-1">Descente DM4 — autres 3èmes, 4èmes, 6 meilleurs 5èmes</span>
             <span class="legend-item legend-relegate-2">Descente DM5 — autres 5èmes, 6èmes</span>
           </div>
           <RankingTable :teams="generalRanking" :show-pool="true" :zones="generalZones" highlight-team="AS SAINT ROGATIEN NANTES" />
