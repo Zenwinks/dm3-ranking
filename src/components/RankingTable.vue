@@ -61,7 +61,10 @@ const colCount = (col) => props.showPool ? 10 : 9
             <td class="col-pos">
               <span class="pos-badge" :class="getRowClass(index)">{{ index + 1 }}</span>
             </td>
-            <td v-if="showPool" class="col-pool">{{ team.poolName }}</td>
+            <td v-if="showPool" class="col-pool">
+              {{ team.poolName }}
+              <span class="pool-rank">{{ team.position }}{{ team.position === 1 ? 'er' : 'è' }}</span>
+            </td>
             <td class="col-name">
               <span v-if="team.nom === highlightTeam" class="mine-marker">▶</span>
               {{ team.nom }}
@@ -117,7 +120,13 @@ td {
   text-align: center;
   vertical-align: middle;
 }
-.col-pool { text-align: center; width: 60px; font-weight: 600; color: #1a3a5c; }
+.col-pool { text-align: center; width: 60px; font-weight: 600; color: #1a3a5c; line-height: 1.2; }
+.pool-rank {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #888;
+}
 .col-name { text-align: left; min-width: 200px; }
 .col-num { text-align: center; width: 52px; }
 
